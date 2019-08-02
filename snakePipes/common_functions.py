@@ -104,8 +104,6 @@ def get_sample_names(infiles, ext, reads):
             x = x[:-l0]
         elif x.endswith(reads[1]):
             x = x[:-l1]
-        else:
-            continue
         s.add(x)
     return sorted(list(s))
 
@@ -169,12 +167,10 @@ def check_replicates(sample_info_file):
             d[cols[conditionCol]] = 0
         d[cols[conditionCol]] += 1
     f.close()
-
     for k, v in d.items():
         if v < 2:
             sys.stderr.write("ERROR: The {} group has no replicates!\n".format(k))
             return False
-
     return True
 
 
