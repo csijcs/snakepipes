@@ -25,9 +25,9 @@ if paired:
 else:
     rule cutadapt:
         input:
-            r1 = fastq_indir_trim+"/{sample}"+reads[0]+".fastq.gz",
+            r1 = fastq_indir_trim+"/{sample}.fastq.gz",
         output:
-            "FASTQ_Cutadapt/{sample}"+reads[0]+".fastq.gz",
+            "FASTQ_Cutadapt/{sample}.fastq.gz",
         params:
             opts = str(trim_options or '')
         log:
@@ -71,9 +71,9 @@ if paired:
 else:
     rule TrimGalore:
         input:
-            fastq_indir_trim+"/{sample}"+reads[0]+".fastq.gz"
+            fastq_indir_trim+"/{sample}.fastq.gz"
         output:
-            "FASTQ_TrimGalore/{sample}"+reads[0]+".fastq.gz"
+            "FASTQ_TrimGalore/{sample}.fastq.gz"
         params:
             tmp = "FASTQ_TrimGalore/{sample}_trimmed.fq.gz",
             opts = str(trim_options or '')
@@ -108,14 +108,14 @@ if paired:
 else:
     rule FastQC_on_trimmed_SE:
         input:
-            fastq_dir+"/{sample}"+reads[0]+".fastq.gz"
+            fastq_dir+"/{sample}.fastq.gz"
         output:
-            "FastQC_trimmed/{sample}"+reads[0]+"_fastqc.html"
+            "FastQC_trimmed/{sample}_fastqc.html"
         log:
-            out = "FastQC_trimmed/logs/FastQC_trimmed.{sample}"+reads[0]+".out",
-            err = "FastQC_trimmed/logs/FastQC_trimmed.{sample}"+reads[0]+".err"
+            out = "FastQC_trimmed/logs/FastQC_trimmed.{sample}.out",
+            err = "FastQC_trimmed/logs/FastQC_trimmed.{sample}.err"
         benchmark:
-            "FastQC_trimmed/.benchmark/FastQC_trimmed.{sample}"+reads[0]+".benchmark"
+            "FastQC_trimmed/.benchmark/FastQC_trimmed.{sample}.benchmark"
         threads: 2
         conda: CONDA_SHARED_ENV
         shell: "fastqc -o FastQC_trimmed {input} > {log.out} 2> {log.err}"  
