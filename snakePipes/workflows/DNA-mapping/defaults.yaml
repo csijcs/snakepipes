@@ -15,7 +15,7 @@ pipeline: dna-mapping
 outdir:
 configfile:
 cluster_configfile:
-local: True
+local: False
 max_jobs: 5
 ## directory with fastq files
 indir:
@@ -23,16 +23,16 @@ indir:
 ## Value can be also path to your own genome config file!
 genome:
 ## FASTQ file extension (default: ".fastq.gz")
-ext: ".fastq.gz"
+ext: '.fastq.gz'
 ## paired-end read name extension (default: ['_R1', "_R2"])
-reads: ['_R1', "_R2"]
+reads: [_R1, _R2]
 ## mapping mode
 mode: mapping
-mapping_prg: BWA
+mapping_prg: Bowtie2
 ## Number of reads to downsample from each FASTQ file
 downsample:
 ## Options for trimming
-trim: True
+trim: False
 trim_prg: cutadapt
 trim_options:
 ## Bin size of output files in bigWig format
@@ -44,7 +44,7 @@ gcbias: false
 ## Retain only de-duplicated reads/read pairs
 dedup: false
 ## Retain only reads with at least the given mapping quality
-mapq: 20
+mapq: 0
 ## Retain only reads mapping in proper pairs
 properpairs: false
 ## Mate orientation in paired-end experiments for Bowtie2 mapping
@@ -53,7 +53,6 @@ mate_orientation: --fr
 ## other Bowtie2 stuff
 insert_size_max: 1000
 bowtie_opts:
-bwa_opts:
 plot_format: png
 ## Median/mean fragment length, only relevant for single-end data (default: 200)
 fragment_length: 200
