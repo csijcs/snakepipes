@@ -51,6 +51,10 @@ Ensure conda is properly installed by running:
 
 ``conda --version``
 
+Clone this repository into your desired location with:
+
+``git clone https://github.com/csijcs/snakepipes.git``
+
 Afterward, simply run the following:
 
 ``conda create -n snakePipes -c mpi-ie -c bioconda -c conda-forge snakePipes``
