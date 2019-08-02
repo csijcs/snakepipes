@@ -69,14 +69,17 @@ if "allelic-mapping" in mode:
     include: os.path.join(maindir, "shared", "rules", "SNPsplit.snakefile")
     # deepTools QC
     include: os.path.join(maindir, "shared", "rules", "deepTools_qc_allelic.snakefile")
-else:
+elif "Bowtie2" in mapping_prg:
     # Bowtie2 mapping, duplicate marking, BAM filtering and indexing
     include: os.path.join(maindir, "shared", "rules", "Bowtie2.snakefile")
+elif "BWA" in mapping_prg:
+    # BWA mapping, duplicate marking, BAM filtering and indexing
+    include: os.path.join(maindir, "shared", "rules", "BWA.snakefile")
 
 ### conditional/optional rules #################################################
 ################################################################################
 
-idxRange = 1
+idxRange = 0
 if paired:
     idxRange = 2
 
@@ -173,7 +176,7 @@ onstart:
 
 ### main rule ##################################################################
 ################################################################################
-localrules: FASTQ1, FASTQ2
+localrules: FASTQ1, FASTQ2, FASTQ
 
 rule all:
     input:
