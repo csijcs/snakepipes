@@ -18,16 +18,14 @@ if paired:
 else:
     rule FastQC_singleEnd:
         input:
-            "FASTQ/{sample}"+reads[0]+".fastq.gz"
+            "FASTQ/{sample}.fastq.gz"
         output:
-            "FastQC/{sample}"+reads[0]+"_fastqc.html"
-        params:
-            reads=reads[0]
+            "FastQC/{sample}_fastqc.html"
         log:
-            out = "FastQC/logs/FastQC.{sample}"+reads[0]+".out",
-            err = "FastQC/logs/FastQC.{sample}"+reads[0]+".err"
+            out = "FastQC/logs/FastQC.{sample}.out",
+            err = "FastQC/logs/FastQC.{sample}.err"
         benchmark:
-            "FastQC/.benchmark/FastQC.{sample}"+reads[0]+".benchmark"
+            "FastQC/.benchmark/FastQC.{sample}.benchmark"
         threads: 2
         conda: CONDA_SHARED_ENV
         shell: """
