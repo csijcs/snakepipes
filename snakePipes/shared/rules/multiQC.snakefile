@@ -20,20 +20,20 @@ def multiqc_input_check(return_value):
                 indir +=" FastQC "
         else:
             if trim and fastqc:
-                infiles.append( expand("FastQC_trimmed/{sample}"+reads[0]+"_fastqc.html", sample = samples) )
+                infiles.append( expand("FastQC_trimmed/{sample}_fastqc.html", sample = samples) )
                 indir += " FastQC_trimmed "
-                infiles.append( expand(fastq_dir+"/{sample}"+reads[0]+".fastq.gz", sample = samples) )
+                infiles.append( expand(fastq_dir+"/{sample}.fastq.gz", sample = samples) )
                 indir += fastq_dir + " "
             elif fastqc:
-                infiles.append( expand("FastQC/{sample}"+reads[0]+"_fastqc.html", sample = samples) )
+                infiles.append( expand("FastQC/{sample}_fastqc.html", sample = samples) )
                 indir +=" FastQC "
     if pipeline=="dna-mapping":
         # pipeline is DNA-mapping
-        infiles.append( expand("Bowtie2/{sample}.Bowtie2_summary.txt", sample = samples) +
+        infiles.append( expand(mapping_prg+"/{sample}."+mapping_prg+"_summary.txt", sample = samples) +
                 expand("Sambamba/{sample}.markdup.txt", sample = samples) +
                 expand("deepTools_qc/estimateReadFiltering/{sample}_filtering_estimation.txt",sample=samples))
+        indir += mapping_prg
         indir += " Sambamba"
-        indir += " Bowtie2"
         indir += " deepTools_qc/estimateReadFiltering"
         if qualimap:
             infiles.append( expand("Qualimap_qc/{sample}.filtered.bamqc_results.txt", sample = samples) )
