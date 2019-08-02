@@ -1,0 +1,13 @@
+chip_dict:
+  wz2951:
+    control: wz3052
+    broad: False
+  wz2952:
+    control: wz3052
+    broad: False
+  wz2953:
+    control: wz3052
+    broad: False
+  wz2954:
+    control: wz3052
+    broad: False
