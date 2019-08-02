@@ -78,6 +78,7 @@ For example, to create the required indicies for hg19 the command would be:
 Indices only need to be created once. You are now ready to proceed to the piplines.
 
 DNA-mapping
+
 For the DNA-mapping pipeline, the minimum required command is:
 
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
@@ -90,6 +91,7 @@ The default mapping program is Bowtie2. To use BWA, copy the above bwa_mapping.y
 Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome.
 
 ChIP-seq
+
 The ChIP-seq pipline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the progrom your sample names, the control for each sample, and whether they to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
 
 If you have run the DNA-mapping pipeline first, then simply run:
