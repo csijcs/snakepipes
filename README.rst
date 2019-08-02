@@ -79,9 +79,9 @@ For the DNA-mapping pipeline, the minimum required command is:
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
 (The --local flag is not expressly required, however if you are running on a local server and not a cluster then it will be necessary).
 
-For example, for mapping to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
+The default mapping program is Bowtie2. To use BWA, copy the above bwa_mapping.yaml to the directory you are running the pipeline from. For example, for mapping to with BWA to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
 
-``DNA-mapping -i /PATH/TO/FASTQ -o /PATH/TO/OUTPUT/DIRECTORY --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
+``DNA-mapping -i /PATH/TO/FASTQ -o /PATH/TO/OUTPUT/DIRECTORY --configfile bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
 
 Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome.
 
@@ -94,9 +94,9 @@ If you have run the DNA-mapping pipeline first, then simply run:
 
 Here -d should be the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. If your samples are not single end then remove the --single-end flag. Also modify the genome_build (i.e. hg19) to suit your purposes).
 
-If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams" (or whatever you want) and run:
+If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams" (or whatever you want). You will also need the from_bam.yaml file from above in the working directory. Additional parameters (such as fragment length) can also be modified in this file. Then run:
 
-``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --local -j 10 --single-end hg19 sample_config.yaml``
+``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --configfile from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
 There will be various folder outputs, including some QC, but the peak files will be in the MACS2 folder. In the future we will likely implement some additional QC measures, such as cross-correlation ("phantom peaks"), and possibly add modules for DiffBind and other downstream analysis. For now this will get the reads mapped and peaks called effectively.
 
