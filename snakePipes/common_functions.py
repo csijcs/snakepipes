@@ -22,12 +22,14 @@ def set_env_yamls():
             'CONDA_scRNASEQ_ENV': 'envs/sc_rna_seq.yaml',
             'CONDA_DNA_MAPPING_ENV': 'envs/dna_mapping.yaml',
             'CONDA_CHIPSEQ_ENV': 'envs/chip_seq.yaml',
+            'CONDA_HISTONE_HMM_ENV': 'envs/histone_hmm.yaml',
             'CONDA_ATAC_ENV': 'envs/atac_seq.yaml',
             'CONDA_HIC_ENV': 'envs/hic.yaml',
             'CONDA_WGBS_ENV': 'envs/wgbs.yaml',
             'CONDA_RMD_ENV': 'envs/rmarkdown.yaml',
             'CONDA_GATK_ENV': 'envs/gatk.yaml',
-            'CONDA_SAMBAMBA_ENV': 'envs/sambamba.yaml'}
+            'CONDA_SAMBAMBA_ENV': 'envs/sambamba.yaml',
+            'CONDA_PHANTOM_ENV': 'envs/phantom.yaml'}
 
 
 def merge_dicts(x, y):
@@ -104,6 +106,8 @@ def get_sample_names(infiles, ext, reads):
             x = x[:-l0]
         elif x.endswith(reads[1]):
             x = x[:-l1]
+        else:
+            continue
         s.add(x)
     return sorted(list(s))
 
@@ -163,14 +167,17 @@ def check_replicates(sample_info_file):
                 sys.exit("ERROR: there's a mismatch between the number of columns in the header and body of {}!\n".format(sample_info_file))
             if len(cols) - 1 == nCols:
                 conditionCol += 1
-        if cols[conditionCol] not in d:
-            d[cols[conditionCol]] = 0
-        d[cols[conditionCol]] += 1
+        if not len(line.strip()) == 0:
+            if cols[conditionCol] not in d:
+                d[cols[conditionCol]] = 0
+            d[cols[conditionCol]] += 1
     f.close()
+
     for k, v in d.items():
         if v < 2:
             sys.stderr.write("ERROR: The {} group has no replicates!\n".format(k))
             return False
+
     return True
 
 
