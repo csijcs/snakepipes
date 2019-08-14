@@ -36,7 +36,7 @@ Workflows available
 
 **(*Also available in "allele-specific" mode)**
 
-I have currently only tested our modifications for the DNA-mapping and ChIP workflows. The others remain intact from the original pipeline, and their functionality should not be affected.
+We have made modifications to the DNA-mapping and ChIP-seq workflows, in order to make them compatible with the current practices in the Zwart lab. These include mapping single-end reads with BWA, marking duplicates with picard, filtering out reads with a MAPQ score below 20, and estimating fragment size with phantompeakquals for MACS2 peakcalling of single-end reads. The others workflows remain intact from the original pipeline, and their functionality should not be affected.
 
 Installation
 -------------
@@ -55,7 +55,7 @@ Clone this repository into your desired location with:
 
 ``git clone https://github.com/csijcs/snakepipes.git``
 
-Change directory into snakepipes with:
+Change directory into the snakepipes folder with:
 
 ``cd snakepipes``
 
