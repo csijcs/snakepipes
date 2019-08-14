@@ -55,14 +55,18 @@ Clone this repository into your desired location with:
 
 ``git clone https://github.com/csijcs/snakepipes.git``
 
-Afterward, simply run the following:
+Change directory into snakepipes with:
 
-``conda env create --file /PATH/TO/YOUR/snakepipes/snakepipes.yaml``
+``cd snakepipes``
+
+Then run the following:
+
+``conda env create --file snakepipes.yaml``
 
 This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will then need to create the conda environments needed by the various workflows.
 
 First run:
-``conda activate snakepipes`` to activate the appropriate conda environment.
+``conda activate snakepipes`` to activate the newly created conda environment.
 
 Then run:
 ``$PYTHON /PATH/TO/YOUR/snakepipes/setup.py install --single-version-externally-managed --record=record.txt``
