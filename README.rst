@@ -57,15 +57,18 @@ Clone this repository into your desired location with:
 
 Afterward, simply run the following:
 
-``conda create -n snakePipes -c mpi-ie -c bioconda -c conda-forge snakePipes``
+``conda env create --file /PATH/TO/YOUR/snakepipes/snakepipes.yaml``
 
-This will create a new conda environment called "snakePipes" into which snakePipes is installed. You will then need to create the conda environments needed by the various workflows.
+This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will then need to create the conda environments needed by the various workflows.
 
 First run:
-``conda activate snakePipes`` to activate the appropriate conda environment.
+``conda activate snakepipes`` to activate the appropriate conda environment.
 
 Then run:
-``snakePipes createEnvs`` to create the various environments and register GATK.
+``$PYTHON /PATH/TO/YOUR/snakepipes/setup.py install --single-version-externally-managed --record=record.txt``
+
+You can now create the various environments required for the pipeline by running:
+``snakePipes createEnvs``
 
 Indices and annotations needed to run the workflows can be created by a simple command :
 
@@ -73,7 +76,7 @@ Indices and annotations needed to run the workflows can be created by a simple c
 
 For example, to create the required indicies for hg19 the command would be:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/gencode.v31lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19``
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/gencode.v31lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
 
 Indices only need to be created once. You are now ready to proceed to the piplines.
 
