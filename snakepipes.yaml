@@ -1,0 +1,13 @@
+name: snakepipes
+channels:
+    - bioconda
+    - defaults
+    - conda-forge
+dependencies:
+    - python=3.6.7
+    - snakemake >=5.2.3
+    - pandas
+    - graphviz
+    - fuzzywuzzy
+    - pyyaml >=5.1
+    - wget
