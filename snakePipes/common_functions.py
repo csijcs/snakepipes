@@ -106,8 +106,6 @@ def get_sample_names(infiles, ext, reads):
             x = x[:-l0]
         elif x.endswith(reads[1]):
             x = x[:-l1]
-        else:
-            continue
         s.add(x)
     return sorted(list(s))
 
