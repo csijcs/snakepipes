@@ -60,11 +60,12 @@ else:
             chip = "filtered_bam/{chip_sample}.filtered.bam",
             control =
                 lambda wildcards: "filtered_bam/"+get_control(wildcards.chip_sample)+".filtered.bam" if get_control(wildcards.chip_sample)
-                else []
+                else [],
+            phantom="phantom/{chip_sample}.fragment_length"
         output:
             peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.xls",
         params:
-            genome_size = int(genome_size),
+            genome_size = 'hs',
             broad_calling =
                 lambda wildcards: "--broad" if is_broad(wildcards.chip_sample)
                 else "",
@@ -78,8 +79,8 @@ else:
             "MACS2/.benchmark/MACS2.{chip_sample}.filtered.benchmark"
         conda: CONDA_CHIPSEQ_ENV
         shell: """
-            macs2 callpeak -t {input.chip} {params.control_param} -f BAM -g {params.genome_size} --keep-dup all --outdir MACS2 \
-                --name {wildcards.chip_sample}.filtered.BAM \
+            macs2 callpeak -t {input.chip} {params.control_param} -f BAM -g {params.genome_size} --nomodel -q 0.01 --outdir MACS2 \
+                --name {wildcards.chip_sample}.filtered.BAM --extsize $(cat {input.phantom})\
                 {params.broad_calling} > {log.out} 2> {log.err}
             """
 
