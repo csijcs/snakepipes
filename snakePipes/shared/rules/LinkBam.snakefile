@@ -1,12 +1,18 @@
 rule link_bam:
     input:
-        bam=indir+"/{sample}"+bam_ext,
-        bai=indir+"/{sample}"+bam_ext+".bai"
+        indir+"/{sample}"+bam_ext
     output:
-        bam_out=mapping_prg+"/{sample}.bam",
-        bai_out=mapping_prg+"/{sample}.bam.bai"
+        mapping_prg+"/{sample}.bam"
     shell:
-        "( [ -f {output.bam_out} ] || ( ln -s -r {input.bam} {output.bam_out} && ln -s -r {input.bai} {output.bai_out} ) )"
+        "( [ -f {output} ] || ( ln -s -r {input.bam} {output.bam_out} ) )"
+
+rule samtools_index_bam:
+     input:
+         "mapping_prg/{sample}.bam"
+     output:
+         "mapping_prg/{sample}.bam.bai"
+     conda: CONDA_SHARED_ENV
+     shell: "samtools index {input}"
 
 rule sorting_bam:
     input:
