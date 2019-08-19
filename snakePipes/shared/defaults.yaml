@@ -7,7 +7,7 @@
 # permitted here.
 ################################################################################
 snakemake_options: ' --use-conda '
-tempdir: /data/extended/
+tempdir: $PWD
 # The following are only needed if you use the --emailAddress option
 smtpServer:
 smtpPort: 0
