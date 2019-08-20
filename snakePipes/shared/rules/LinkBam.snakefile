@@ -4,15 +4,7 @@ rule link_bam:
     output:
         mapping_prg+"/{sample}.bam"
     shell:
-        "( [ -f {output} ] || ( ln -s -r {input.bam} {output.bam_out} ) )"
-
-rule samtools_index_bam:
-     input:
-         "mapping_prg/{sample}.bam"
-     output:
-         "mapping_prg/{sample}.bam.bai"
-     conda: CONDA_SHARED_ENV
-     shell: "samtools index {input}"
+        "( [ -f {output} ] || ( ln -s -r {input} {output} ) )"
 
 rule sorting_bam:
     input:
