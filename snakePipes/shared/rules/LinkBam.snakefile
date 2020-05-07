@@ -18,6 +18,13 @@ rule sorting_bam:
         """
             samtools sort -@ 4 -m 2G {input} -o {output} 2> {log}
         """
+rule samtools_index_bam:
+     input:
+         mapping_prg+"/{sample}.bam"
+     output:
+         mapping_prg+"/{sample}.bam.bai"
+     conda: CONDA_SHARED_ENV
+     shell: "samtools index {input}"
 
 rule picard_mark_duplicates:
     input:
