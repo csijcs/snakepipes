@@ -41,17 +41,17 @@ We have made modifications to the DNA-mapping and ChIP-seq workflows, in order t
 Installation
 -------------
 
-You will need python > 3.5, so first check with:
-
-``python --version``
-
-Snakepipes uses conda for installation and dependency resolution, so you will need to `install conda <https://conda.io/docs/user-guide/install/index.html>`__ first.
-
 Ensure conda is properly installed by running:
 
 ``conda --version``
 
-Clone this repository into your desired location with:
+If the command does not work, you may need to initialize conda in your environment with:
+
+``conda init``
+
+You may need to log out and log back in for changes to take effect.
+
+Once you have conda working, clone this repository into your desired location with:
 
 ``git clone https://github.com/csijcs/snakepipes.git``
 
@@ -63,33 +63,36 @@ Then run the following:
 
 ``conda env create --file snakepipes.yaml``
 
-This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will then need to create the conda environments needed by the various workflows.
+This will create a new conda environment called "snakepipes" into which snakePipes is installed. 
 
-First run:
-``conda activate snakepipes`` to activate the newly created conda environment.
+You will now need to create the conda environments needed by the various workflows.
 
-Then run:
-``$PYTHON /PATH/TO/YOUR/snakepipes/setup.py install --single-version-externally-managed --record=record.txt``
+First activate the snakepipes environment with:
+``conda activate snakepipes``
 
-You can now create the various environments required for the pipeline by running:
-``snakePipes createEnvs``
+Then run the build script with:
+``sh build.sh``
 
-Indices and annotations needed to run the workflows can be created by a simple command :
+You now need to create the various environments required for the pipeline by running:
+``snakePipes createEnvs --condaDir ~/.conda/envs``
 
-``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir/genome_build>``. 
+Before running any anlyses, you will need to create indices. These only need to be created once, but each genome build (i.e. hg19, hg38, mm10, etc.) will need their own indices.  These can be constructed with the following command:
+
+``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>``. 
 
 For example, to create the required indicies for hg19 the command would be:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/gencode.v31lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
 
-Indices only need to be created once. You are now ready to proceed to the piplines.
+You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above. 
+
+Once indices are created, you are ready to proceed to the pipelines.
 
 DNA-mapping
 
 For the DNA-mapping pipeline, the minimum required command is:
 
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
-(The --local flag is not expressly required, however if you are running on a local server and not a cluster then it will be necessary).
 
 The default mapping program is Bowtie2. To use BWA, copy the above bwa_mapping.yaml to the directory you are running the pipeline from. For example, for mapping to with BWA to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
 
