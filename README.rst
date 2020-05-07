@@ -85,17 +85,19 @@ The necessary files/links for the current and previous releases can be obtained 
 
 For example, with the current release the command to create the required indicies for hg19 would be:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
 
 For the current release of hg38:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh38.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
 
 And for the current release of mm10:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/GRCm38.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
 
-You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you still have running with ``screen -ls``)
+You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
+
+Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you have running with ``screen -ls``. If you run ``screen -ls`` immediately after executing your ``screen -dm createIndices...`` command and you do no see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
 
 Once indices are created, you are ready to proceed to the pipelines.
 
@@ -128,6 +130,19 @@ If you have not run the DNA-mapping pipeline first, then you can still run the p
 There will be various folder outputs, including some QC, but the peak files will be in the MACS2 folder. In the future we will likely implement some additional QC measures, such as cross-correlation ("phantom peaks"), and possibly add modules for DiffBind and other downstream analysis. For now this will get the reads mapped and peaks called effectively.
 
 The other modules have remained untouched and should work according to the original pipeline.
+
+When you are finished you should deactivate your conda session to leave the environment with:
+
+``conda deactivate``
+
+This is a good practice so that you don't unintentially alter the environment.
+
+Every time you want to run more analysis you can simply activate the conda environment again with:
+
+``conda activate snakepipes``
+
+All the previously created environments and indices will still be there and you can proceed directly to the pipeline.
+
 
 Documentation
 --------------
