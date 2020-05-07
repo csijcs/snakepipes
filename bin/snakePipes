@@ -51,10 +51,6 @@ def parse_arguments():
                                   action='store_true',
                                   help='Only print the environments that would be created, don\'t actually create them.')
 
-    createEnvsParser.add_argument('--skipGATK',
-                                  action='store_true',
-                                  help='Skip registering GATK')
-
     createEnvsParser.add_argument('--noSitePackages',
                                   action='store_true',
                                   help='Prevent conda from looking at anything installed in a users home directory. While this is convenient to ensure that ONLY packages installed by snakePipes are used, it means that you will occasionally get scary-looking warning messages when you try to create new conda environments.')
@@ -128,17 +124,6 @@ def envInfo():
         print("{} is in:\n    {}\n".format(env, os.path.join(condaEnvDir, h)))
 
 
-def registerGATK(gatkEnv):
-    URL="https://software.broadinstitute.org/gatk/download/auth?package=GATK-archive&version=3.5-0-g36282e4"
-    cmd = ["wget", "-O", "GATK-archive-3.5.tar.bz2", "{}".format(URL)]
-    subprocess.check_call(cmd)
-
-    cmd = ["{}/bin/gatk-register".format(gatkEnv), "GATK-archive-3.5.tar.bz2"]
-    subprocess.check_call(cmd)
-    os.remove("GATK-archive-3.5.tar.bz2")
-    shutil.rmtree("/tmp/gatk")
-
-
 def fixSitePy(envPath):
     """
     We would really like to prevent any snakePipes environment from using the user site packages.
@@ -168,7 +153,6 @@ def createCondaEnvs(args):
         condaDir = os.path.dirname(condaDir)
     else:
         condaDir = os.path.join(condaDir, "envs")
-    gatkEnv = None
 
     f = open(os.path.join(baseDir, "shared/defaults.yaml"))
     cf = yaml.load(f, Loader=yaml.FullLoader)
@@ -205,9 +189,6 @@ def createCondaEnvs(args):
         f.close()
         h = md5hash.hexdigest()
 
-        if 'gatk' in env:
-            gatkEnv = os.path.join(condaDirUse, h)
-
         sys.stderr.write("Creating environment from {} in {}\n".format(os.path.join(baseDir, "shared/rules", env), condaDirUse))
         cmd = ["conda", "env", "create", "--force", "--file", os.path.join(baseDir, "shared/rules", env)]
         if '--conda-prefix' in cf['snakemake_options'] and (args.condaDir or args.keepCondaDir):
@@ -224,10 +205,6 @@ def createCondaEnvs(args):
         # Ignore site-packages
         if args.noSitePackages and not args.info:
             fixSitePy(os.path.join(condaDirUse, h))
-
-    # We can't actually install GATK with conda, which is annoying
-    if gatkEnv and not args.skipGATK and not args.info:
-        registerGATK(gatkEnv)
 
     # Ignore site-packages in this env
     if args.noSitePackages and not args.info:
