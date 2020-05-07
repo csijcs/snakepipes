@@ -97,7 +97,7 @@ And for the current release of mm10:
 
 You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
 
-Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you have running with ``screen -ls``. If you run ``screen -ls`` immediately after executing your ``screen -dm createIndices...`` command and you do no see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
+Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you have running with ``screen -ls``. If you run ``screen -ls`` immediately after executing your ``screen -dm createIndices...`` command and you do not see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
 
 Once indices are created, you are ready to proceed to the pipelines.
 
