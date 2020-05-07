@@ -81,21 +81,21 @@ Before running any anlyses, you will need to create indices. These only need to 
 
 ``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>``. 
 
-The necessary files/links can be obtained from https://www.gencodegenes.org/
+The necessary files/links for the current and previous releases can be obtained from https://www.gencodegenes.org/
 
-For example, to create the required indicies for hg19 the command would be:
+For example, with the current release the command to create the required indicies for hg19 would be:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
 
-to create the required indicies for hg38 the command would be:
+For the current release of hg38:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
 
-to create the required indicies for mm10 the command would be:
+And for the current release of mm10:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
 
-You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
+You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``. It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects.)
 
 Once indices are created, you are ready to proceed to the pipelines.
 
@@ -105,11 +105,11 @@ For the DNA-mapping pipeline, the minimum required command is:
 
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
 
-The default mapping program is Bowtie2. To use BWA, copy the above bwa_mapping.yaml to the directory you are running the pipeline from. For example, for mapping to with BWA to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
+The default mapping program is Bowtie2. To use BWA, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. For example, for mapping to with BWA to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
 
-``DNA-mapping -i /PATH/TO/FASTQ -o /PATH/TO/OUTPUT/DIRECTORY --configfile bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
+``DNA-mapping -i /PATH/TO/FASTQ -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
 
-Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome.
+Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome build.
 
 ChIP-seq
 
@@ -121,9 +121,9 @@ If you have run the DNA-mapping pipeline first, then simply run:
 
 Here -d should be the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. If your samples are not single end then remove the --single-end flag. Also modify the genome_build (i.e. hg19) to suit your purposes).
 
-If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams" (or whatever you want). You will also need the from_bam.yaml file from above in the working directory. Additional parameters (such as fragment length) can also be modified in this file. Then run:
+If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams". You will also need to supply the path to the from_bam.yaml in the snakepipes foler downloaded from this hub. Additional parameters (such as fragment length) can also be modified in this file. Then run:
 
-``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --configfile from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
+``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
 There will be various folder outputs, including some QC, but the peak files will be in the MACS2 folder. In the future we will likely implement some additional QC measures, such as cross-correlation ("phantom peaks"), and possibly add modules for DiffBind and other downstream analysis. For now this will get the reads mapped and peaks called effectively.
 
