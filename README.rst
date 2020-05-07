@@ -81,11 +81,21 @@ Before running any anlyses, you will need to create indices. These only need to 
 
 ``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>``. 
 
+The necessary files/links can be obtained from https://www.gencodegenes.org/
+
 For example, to create the required indicies for hg19 the command would be:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_31/GRCh37_mapping/gencode.v31lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.annotation.gtf.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.transcripts.fa.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
 
-You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above. 
+to create the required indicies for hg38 the command would be:
+
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
+
+to create the required indicies for mm10 the command would be:
+
+``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
+
+You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
 
 Once indices are created, you are ready to proceed to the pipelines.
 
