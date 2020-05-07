@@ -63,17 +63,18 @@ Then run the following:
 
 ``conda env create --file snakepipes.yaml``
 
-This will create a new conda environment called "snakepipes" into which snakePipes is installed. 
-
-You will now need to create the conda environments needed by the various workflows.
+This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will now need to create the conda environments needed by the various workflows.
 
 First activate the snakepipes environment with:
+
 ``conda activate snakepipes``
 
 Then run the build script with:
+
 ``sh build.sh``
 
 You now need to create the various environments required for the pipeline by running:
+
 ``snakePipes createEnvs --condaDir ~/.conda/envs``
 
 Before running any anlyses, you will need to create indices. These only need to be created once, but each genome build (i.e. hg19, hg38, mm10, etc.) will need their own indices.  These can be constructed with the following command:
