@@ -95,7 +95,7 @@ And for the current release of mm10:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.transcripts.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
 
-You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``. It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects.)
+You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you still have running with ``screen -ls``)
 
 Once indices are created, you are ready to proceed to the pipelines.
 
