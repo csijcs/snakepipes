@@ -74,7 +74,14 @@ def multiqc_input_check(return_value):
         indir += mapping_prg
         indir += " Sambamba "
         indir += " deepTools_qc/estimateReadFiltering"
-
+    elif pipeline == "chip-seq" and ("fromBam" in globals() or fromBam):
+        infiles.append( expand(mapping_prg+"/{sample}.bam", sample = samples) +
+        expand("Sambamba/{sample}.markdup.txt", sample = samples) +
+        expand("deepTools_qc/estimateReadFiltering/{sample}_filtering_estimation.txt", sample=samples))
+        indir += mapping_prg
+        indir += " Sambamba "
+        indir += " deepTools_qc/estimateReadFiltering"
+        
     if return_value == "infiles":
         return(infiles)
     else:
