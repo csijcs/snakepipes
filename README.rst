@@ -77,7 +77,7 @@ You now need to create the various environments required for the pipeline by run
 
 ``snakePipes createEnvs --condaDir ~/.conda/envs``
 
-Before running any anlyses, you will need to create indices. These only need to be created once, but each genome build (i.e. hg19, hg38, mm10, etc.) will need their own indices.  These can be constructed with the following command:
+Before running any anlyses, you will need to create indices. These only need to be created once, but each genome build (i.e. hg19, hg38, etc.) will need their own indices.  These can be constructed with the following command:
 
 ``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>``. 
 
@@ -90,10 +90,6 @@ For example, with the current release the command to create the required indicie
 For the current release of hg38:
 
 ``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh38.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
-
-And for the current release of mm10:
-
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/GRCm38.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_mouse/release_M25/gencode.vM25.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/mm10 mm10``
 
 You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
 
@@ -115,7 +111,7 @@ Here, -i specifies the input folder contaning the .fastq.gz files, -o is the out
 
 ChIP-seq
 
-The ChIP-seq pipline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the progrom your sample names, the control for each sample, and whether they to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
+The ChIP-seq pipline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the program your sample names, the control for each sample, and whether to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
 
 If you have run the DNA-mapping pipeline first, then simply run:
 
@@ -123,11 +119,13 @@ If you have run the DNA-mapping pipeline first, then simply run:
 
 Here -d should be the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. If your samples are not single end then remove the --single-end flag. Also modify the genome_build (i.e. hg19) to suit your purposes).
 
-If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams". You will also need to supply the path to the from_bam.yaml in the snakepipes foler downloaded from this hub. Additional parameters (such as fragment length) can also be modified in this file. Then run:
+If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded from this hub. Then run:
 
 ``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
-There will be various folder outputs, including some QC, but the peak files will be in the MACS2 folder. In the future we will likely implement some additional QC measures, such as cross-correlation ("phantom peaks"), and possibly add modules for DiffBind and other downstream analysis. For now this will get the reads mapped and peaks called effectively.
+There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder.
+
+The pipelines will also take some time to run depending on the number of samples, so you may also want to run them in ``screen``.
 
 The other modules have remained untouched and should work according to the original pipeline.
 
