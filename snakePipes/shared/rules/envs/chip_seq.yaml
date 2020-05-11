@@ -8,3 +8,4 @@ dependencies:
  - tabix = 0.2.6
  - r-histonehmm = 1.7
  - picard = 2.19.0
+ - plotly = 4.7.1
