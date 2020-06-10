@@ -1,0 +1,16 @@
+blacklist_bed: ''
+bowtie2_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/BowtieIndex/genome
+bwa_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/BWAIndex/genome.fa
+bwameth_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/BWAmethIndex/genome.fa
+extended_coding_regions_gtf: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/annotation/genes.slop.gtf
+genes_bed: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/annotation/genes.bed
+genes_gtf: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/annotation/genes.gtf
+genome_2bit: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/genome_fasta/genome.2bit
+genome_dict: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/genome_fasta/genome.dict
+genome_fasta: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/genome_fasta/genome.fa
+genome_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/genome_fasta/genome.fa.fai
+genome_size: 2861343702
+hisat2_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/HISAT2Index/genome
+known_splicesites: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/HISAT2Index/splice_sites.txt
+star_index: /shared/gcf/t.severson/may2020_snakepipes_indices/hg19/STARIndex/
+ignore_forNorm: "X Y MT"
