@@ -9,3 +9,4 @@ dependencies:
  - r-histonehmm = 1.7
  - picard = 2.19.0
  - plotly = 4.7.1
+ - matplotlib = 2.1.1
