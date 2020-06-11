@@ -172,7 +172,8 @@ if paired:
         input:
             run_deepTools_qc(fromBam),
             run_deepTools_ChIP(),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.xls", chip_sample = chip_samples),
+            expand("MACS2/{chip_sample}.filtered.BAM_peaks.macs2", chip_sample = chip_samples),
+            expand("MACS2/{chip_sample}.filtered.BAM_peaks.chr.macs2", chip_sample = chip_samples),
             expand("MACS2/{chip_sample}.filtered.BAM_peaks.qc.txt", chip_sample = chip_samples),
             # run histoneHMM if allelic_bams are absent (since it gives index error without allele_specific index)
             run_histoneHMM(allele_info),
@@ -188,7 +189,8 @@ else:
         input:
             run_deepTools_qc(fromBam),
             run_deepTools_ChIP(),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.xls", chip_sample = chip_samples),
+            expand("MACS2/{chip_sample}.filtered.BAM_peaks.macs2", chip_sample = chip_samples),
+            expand("MACS2/{chip_sample}.filtered.BAM_peaks.chr.macs2", chip_sample = chip_samples),
             expand("MACS2/{chip_sample}.filtered.BAM_peaks.qc.txt", chip_sample = chip_samples),
             # run histoneHMM if allelic_bams are absent (since it gives index error without allele_specific index)
             run_histoneHMM(allele_info),
