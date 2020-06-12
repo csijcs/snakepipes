@@ -165,7 +165,7 @@ onstart:
 ### main rule ##################################################################
 ################################################################################
 if fromBam:
-    localrules: link_bam, samtools_index_bam, sorting_bam, picard_mark_duplicates, samtools_filter, samtools_index_filtered, phantom, FastQC_fromBam
+    localrules: link_bam, samtools_index_bam, sorting_bam, picard_mark_duplicates, samtools_filter, samtools_index_filtered, phantom
 
 if paired:
     rule all:
