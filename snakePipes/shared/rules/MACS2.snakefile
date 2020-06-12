@@ -55,8 +55,8 @@ if paired:
                 -g {params.genome_size} --keep-dup all \
                 --outdir MACS2 --name {wildcards.chip_sample}.filtered.BAMPE \
                 {params.broad_calling} > {log.out}.BAMPE 2> {log.err}.BAMPE
-                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
-                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaksPE} > {output.chrPE}
+                awk '{if (length($1) <3 && $1 !="MT"){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
+                awk '{if (length($1) <3 && $1 !="MT"){ print "chr"$0 } else {print $0}}' {output.peaksPE} > {output.chrPE}
             """
 else:
     rule MACS2:
@@ -87,7 +87,7 @@ else:
             macs2 callpeak -t {input.chip} {params.control_param} -f BAM -g {params.genome_size} --nomodel -q 0.01 --outdir MACS2 \
                 --name {wildcards.chip_sample}.filtered.BAM --extsize $(cat {input.phantom})\
                 {params.broad_calling} > {log.out} 2> {log.err}
-                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
+                awk '{if (length($1) <3 && $1 !="MT"){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
             """
 
 
