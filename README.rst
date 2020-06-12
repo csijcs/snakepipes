@@ -56,10 +56,12 @@ Find the path to the conda your are using with:
 ``which conda``
 
 For harris server (most if not all users), your conda path should be:
-``/opt/anaconda/bin/conda''
+
+``/opt/anaconda/bin/conda``
 
 If you are on darwin, your conda path should be:
-``/opt/anaconda3/bin/conda''
+
+``/opt/anaconda3/bin/conda``
 
 Once you have conda working and the proper path, clone this repository into your desired location with:
 
@@ -87,18 +89,20 @@ You now need to create the various environments required for the pipeline by run
 
 ``snakePipes createEnvs --condaDir ~/.conda/envs/snakepipes``
 
-There are premade indices stored in a shared location for hg19 and hg38, using the exact fasta and annotation files from the core. If you do need additional indices for another organism or genombuild, they can be built with the following command:
+You do not need to create indices for hg19 or hg38. We provide premade indices stored in a shared location for hg19 and hg38, using the exact fasta and annotation files from the core facility. If you do need additional indices for another organism or genome build, they can be constructed with the following command:
 
 ``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>`` 
 
-Be careful creating indices becuase if you created new hg19 or hg38 indices, you will change that path in your installation. It's best to give any new indices a new name (i.e. hg38_version_x), then they will be stored as a completely different index.
+Be careful creating indices becuase if you create new indices for hg19 or hg38 , you will change that path in your installation and no longer be using the premade indices. It's best to give any new indices a new name (i.e. hg38_version_x), then they will be stored as a completely different index location the the premade location will remain intact.
 
 
 Renaming files
 -------------
-Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the WZ number (i.e. wz3909.bam).
+**Note - all of youre sequencing filenames should contain a WZ number. Make sure to submit your samples with a WZ number in the name or this script will not work.
 
-To accomplish this, we have provided an R script above (rename_files.R). This script can either be run from within R, or from the terminal. To run from within R, set your working directory to the folder containg your files (bam or fastq):
+Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the WZ number (i.e. wz3909.bam). 
+
+To accomplish this, we have provided an R script above (rename_files.R). This script can either be run from within R, or from the terminal. To run from within R, set your working directory to the folder contaning your files (bam or fastq):
 
 ``setwd("/DATA/your.name/your_files/")``
 
@@ -112,7 +116,7 @@ If you prefer, you can also run from terminal by copying the script into the fol
 
 ``Rscript rename_files.R``
 
-Either way, this will rename all your files and move them into a folder called "rename". All of the bams should have been moved into this folder, so if there are any remaining then something went wrong and you should seek help.
+Either way, this will rename all your files and move them into a folder called "rename". All of the files should have been moved into this folder, so if there are any remaining then something went wrong and you should seek help.
 
 Once your files are renamed, you are now ready to proceed with the arropriate pipeline below.
 
@@ -123,7 +127,7 @@ For the DNA-mapping pipeline, the minimum required command is:
 
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
 
-The default mapping program is Bowtie2. To use BWA, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. All of you files should be in a folder named rename. For mapping to with BWA to hg19, run the following command:
+The default mapping program is Bowtie2. To use BWA (recommended for Zwart lab ChIP expriments), supply the path to the location of the bwa_mapping.yaml downloaded with this hub. After the renaming step above, all of you files should be in a folder called rename. For example, to run DNA mapping with BWA to hg19, run the following command:
 
 ``DNA-mapping -i /PATH/TO/FASTQ/rename -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
 
