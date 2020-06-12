@@ -21,10 +21,10 @@ if paired:
                 else [],
             insert_size_metrics = "deepTools_qc/bamPEFragmentSize/fragmentSize.metric.tsv"
         output:
-            peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.macs2",
-            peaksPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.macs2",
-            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.chr.macs2",
-            chrPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.chr.macs2",            
+            peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak",
+            peaksPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.narrowPeak",
+            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak.chr",
+            chrPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.narrowPeak.chr",            
         params:
             genome_size = genome_size,
             broad_calling =
@@ -67,8 +67,8 @@ else:
                 else [],
             phantom="phantom/{chip_sample}.fragment_length"
         output:
-            peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.macs2",
-            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.chr.macs2"
+            peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak",
+            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak.chr"
         params:
             genome_size = 'hs',
             broad_calling =
@@ -97,7 +97,7 @@ else:
 rule MACS2_peak_qc:
     input:
         bam = "filtered_bam/{sample}.filtered.bam",
-        bed = "MACS2/{sample}.filtered.BAM_peaks.macs2"
+        bed = "MACS2/{sample}.filtered.BAM_peaks.narrowPeak"
     output:
         qc = "MACS2/{sample}.filtered.BAM_peaks.qc.txt"
     params:
