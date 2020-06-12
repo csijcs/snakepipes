@@ -23,8 +23,8 @@ if paired:
         output:
             peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak",
             peaksPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.narrowPeak",
-            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak.chr",
-            chrPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.narrowPeak.chr",            
+            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.chr.narrowPeak",
+            chrPE = "MACS2/{chip_sample}.filtered.BAMPE_peaks.chr.narrowPeak",            
         params:
             genome_size = genome_size,
             broad_calling =
@@ -55,8 +55,8 @@ if paired:
                 -g {params.genome_size} --keep-dup all \
                 --outdir MACS2 --name {wildcards.chip_sample}.filtered.BAMPE \
                 {params.broad_calling} > {log.out}.BAMPE 2> {log.err}.BAMPE
-                sed -e 's/^/chr/' {output.peaks} > {output.chr}
-                sed -e 's/^/chr/' {output.peaksPE} > {output.chrPE}
+                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
+                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaksPE} > {output.chrPE}
             """
 else:
     rule MACS2:
@@ -68,7 +68,7 @@ else:
             phantom="phantom/{chip_sample}.fragment_length"
         output:
             peaks = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak",
-            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak.chr"
+            chr = "MACS2/{chip_sample}.filtered.BAM_peaks.chr.narrowPeak"
         params:
             genome_size = 'hs',
             broad_calling =
@@ -87,7 +87,7 @@ else:
             macs2 callpeak -t {input.chip} {params.control_param} -f BAM -g {params.genome_size} --nomodel -q 0.01 --outdir MACS2 \
                 --name {wildcards.chip_sample}.filtered.BAM --extsize $(cat {input.phantom})\
                 {params.broad_calling} > {log.out} 2> {log.err}
-                sed -e 's/^/chr/' {output.peaks} > {output.chr}
+                awk '{if (length($1) == 1){ print "chr"$0 } else {print $0}}' {output.peaks} > {output.chr}
             """
 
 
