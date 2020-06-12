@@ -15,7 +15,7 @@ snakePipes
     :alt: Citation
 
 
-snakePipes are flexible and powerful workflows built using `snakemake <snakemake.readthedocs.io>`__ that simplify the analysis of NGS data.
+This repository is a modification of the snakePipes workflows forked from `https://github.com/maxplanck-ie/snakepipes`
 
 .. image:: ./docs/content/images/snakePipes.png
    :scale: 20 %
@@ -41,17 +41,27 @@ We have made modifications to the DNA-mapping and ChIP-seq workflows, in order t
 Installation
 -------------
 
+Begin by logging into the server and entering the terminal environment.
+
+First initialize conda in your environment with:
+
+``conda init``
+
 Ensure conda is properly installed by running:
 
 ``conda --version``
 
-If the command does not work, you may need to initialize conda in your environment with:
+Find the path to the conda your are using with:
 
-``conda init``
+``which conda``
 
-You may need to log out and log back in for changes to take effect.
+For harris server (most if not all users), your conda path should be:
+``/opt/anaconda/bin/conda''
 
-Once you have conda working, clone this repository into your desired location with:
+If you are on darwin, your conda path should be:
+``/opt/anaconda3/bin/conda''
+
+Once you have conda working and the proper path, clone this repository into your desired location with:
 
 ``git clone https://github.com/csijcs/snakepipes.git``
 
@@ -59,9 +69,9 @@ Change directory into the snakepipes folder with:
 
 ``cd snakepipes``
 
-Then run the following:
+Run the following using your pull conda path (harris shown for example):
 
-``conda env create --file snakepipes.yaml``
+``/opt/anaconda/bin/conda env create --file snakepipes.yaml``
 
 This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will now need to create the conda environments needed by the various workflows.
 
@@ -75,41 +85,52 @@ Then run the build script with:
 
 You now need to create the various environments required for the pipeline by running:
 
-``snakePipes createEnvs --condaDir ~/.conda/envs``
+``snakePipes createEnvs --condaDir ~/.conda/envs/snakepipes``
 
-Before running any anlyses, you will need to create indices. These only need to be created once, but each genome build (i.e. hg19, hg38, etc.) will need their own indices.  These can be constructed with the following command:
+There are premade indices stored in a shared location for hg19 and hg38, using the exact fasta and annotation files from the core. If you do need additional indices for another organism or genombuild, they can be built with the following command:
 
-``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>``. 
+``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>`` 
 
-The necessary files/links for the current and previous releases can be obtained from https://www.gencodegenes.org/
+Be careful creating indices becuase if you created new hg19 or hg38 indices, you will change that path in your installation. It's best to give any new indices a new name (i.e. hg38_version_x), then they will be stored as a completely different index.
 
-For example, with the current release the command to create the required indicies for hg19 would be:
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/GRCh37.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh37_mapping/gencode.v34lift37.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg19 hg19``
+Renaming files
+-------------
+Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the WZ number (i.e. wz3909.bam).
 
-For the current release of hg38:
+To accomplish this, we have provided an R script above (rename_files.R). This script can either be run from within R, or from the terminal. To run from within R, set your working directory to the folder containg your files (bam or fastq):
 
-``createIndices --genomeURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/GRCh38.primary_assembly.genome.fa.gz --gtfURL ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_34/gencode.v34.annotation.gtf.gz --local -o /PATH/TO/OUTPUT/DIRECTORY/hg38 hg38``
+``setwd("/DATA/your.name/your_files/")``
 
-You will need to supply your own /PATH/TO/OUTPUT/DIRECTORY/ above (i.e. the location where you want the genome indices stored). 
+If you copy the script to the same folder as your files, you can run:
 
-Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: ``screen -dm createIndices...``). It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you have running with ``screen -ls``. If you run ``screen -ls`` immediately after executing your ``screen -dm createIndices...`` command and you do not see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
+``source('rename_files.R')``
 
-Once indices are created, you are ready to proceed to the pipelines.
+Otherwise is can be run from the RStudio script window. 
+
+If you prefer, you can also run from terminal by copying the script into the folder containing your files and running:
+
+``Rscript rename_files.R``
+
+Either way, this will rename all your files and move them into a folder called "rename". All of the bams should have been moved into this folder, so if there are any remaining then something went wrong and you should seek help.
+
+Once your files are renamed, you are now ready to proceed with the arropriate pipeline below.
 
 DNA-mapping
+-------------
 
 For the DNA-mapping pipeline, the minimum required command is:
 
 ``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
 
-The default mapping program is Bowtie2. To use BWA, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. For example, for mapping to with BWA to hg19, first put all .fastq.gz files into a folder named FASTQ. Then run the following command:
+The default mapping program is Bowtie2. To use BWA, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. All of you files should be in a folder named rename. For mapping to with BWA to hg19, run the following command:
 
-``DNA-mapping -i /PATH/TO/FASTQ -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
+``DNA-mapping -i /PATH/TO/FASTQ/rename -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
 
 Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome build.
 
-ChIP-seq
+ChIP-seq from DNA-mapping pipeline
+----------------------------------
 
 The ChIP-seq pipline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the program your sample names, the control for each sample, and whether to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
 
@@ -119,15 +140,33 @@ If you have run the DNA-mapping pipeline first, then simply run:
 
 Here -d should be the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. If your samples are not single end then remove the --single-end flag. Also modify the genome_build (i.e. hg19) to suit your purposes).
 
-If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, put all of your .bam files into a folder called "bams". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded from this hub. Then run:
 
-``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bams --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
+ChIP-seq from bam files
+-----------------------
 
-There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder.
+If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case,  all of your .bam files shold be renamed in a folder called "rename". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded from this hub. Then run:
 
-The pipelines will also take some time to run depending on the number of samples, so you may also want to run them in ``screen``.
+``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
-The other modules have remained untouched and should work according to the original pipeline.
+There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder. For narrow peaks, the macs2 output will end in ".narrowPeaks", and we have added chr to the chromosome numbers in the file ending in ".chr.narrowPeaks"
+
+Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: 
+
+``screen -dm ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
+
+It will look like nothing is happening, but it is running in detached mode and will not be interrupted if your session disconnects. You can see what screens you have running with:
+
+``screen -ls``
+
+If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
+
+Additional Pipelines
+-----------------------
+The other modules have remained untouched and should work according to the original pipeline `https://github.com/maxplanck-ie/snakepipes`
+
+
+Finishing up
+-------------
 
 When you are finished you should deactivate your conda session to leave the environment with:
 
