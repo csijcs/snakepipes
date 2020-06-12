@@ -98,9 +98,9 @@ Be careful creating indices becuase if you create new indices for hg19 or hg38 ,
 
 Renaming files
 -------------
-**Note - all of youre sequencing filenames should contain a WZ number. Make sure to submit your samples with a WZ number in the name or this script will not work.
+**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work.
 
-Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the WZ number (i.e. wz3909.bam). 
+Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the wz number (i.e. wz3909.bam). 
 
 To accomplish this, we have provided an R script above (rename_files.R). This script can either be run from within R, or from the terminal. To run from within R, set your working directory to the folder contaning your files (bam or fastq):
 
