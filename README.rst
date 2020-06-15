@@ -71,7 +71,7 @@ Change directory into the snakepipes folder with:
 
 ``cd snakepipes``
 
-Run the following using your pull conda path (harris shown for example):
+Run the following using your full conda path (harris shown for example):
 
 ``/opt/anaconda/bin/conda env create --file snakepipes.yaml``
 
@@ -93,12 +93,12 @@ You do not need to create indices for hg19 or hg38. We provide premade indices s
 
 ``createIndices --genomeURL <path/URL to your genome fasta> --gtfURL <path/url to genes.gtf> --local -o <output_dir> <name>`` 
 
-Be careful creating indices becuase if you create new indices for hg19 or hg38 , you will change that path in your installation and no longer be using the premade indices. It's best to give any new indices a new name (i.e. hg38_version_x), then they will be stored as a completely different index location the the premade location will remain intact.
+Be careful creating indices becuase if you create new indices for hg19 or hg38 , you will change that path in your installation and no longer be using the premade indices. It's best to give any new indices a new name (i.e. hg38_version_x), then they will be stored as a completely different index location and the premade location will remain intact.
 
 
 Renaming files
 -------------
-**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work.
+**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work. If there are two samples with the same wz number (i.e. same split across two lanes) with second file will be renamed wzNUMBER_2 (i.e. wz3909_2). If there are more than two (not likely, but possible), it will give an error and not rename your additional files. If you do actually have more than two (i.e. split across more than two lanes), seek professional help.
 
 Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the wz number (i.e. wz3909.bam). 
 
@@ -154,7 +154,7 @@ If you have not run the DNA-mapping pipeline first, then you can still run the p
 
 There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder. For narrow peaks, the macs2 output will end in ".narrowPeaks", and we have added chr to the chromosome numbers in the file ending in ".chr.narrowPeaks"
 
-Also, creating indices will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: 
+Also, running pipelines will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: 
 
 ``screen -dm ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
@@ -182,7 +182,7 @@ Every time you want to run more analysis you can simply activate the conda envir
 
 ``conda activate snakepipes``
 
-All the previously created environments and indices will still be there and you can proceed directly to the pipeline.
+All the previously created environments and indices will still be there and you can proceed directly to the pipelines.
 
 
 Documentation
