@@ -7,3 +7,4 @@ dependencies:
  - qualimap = 2.2.2b
  - samtools = 1.9
  - bwa = 0.7.17
+ - matplotlib = 2.1.1
