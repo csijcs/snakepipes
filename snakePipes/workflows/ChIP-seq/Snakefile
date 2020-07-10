@@ -108,6 +108,12 @@ def run_deepTools_ChIP():
             file_list.append(["deepTools_ChIP/bamCompare/"+chip_sample+".filtered.log2ratio.over_"+control_name+".bw"])
     return(file_list)
 
+def run_macs2():
+    file_list = expand("MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak", chip_sample = chip_samples)
+    file_list.extend(expand("MACS2/{chip_sample}.filtered.BAM_peaks.chr.narrowPeak", chip_sample = chip_samples))
+    file_list.extend(expand("MACS2/{chip_sample}.filtered.BAM_peaks.qc.txt", chip_sample = chip_samples))
+    return (file_list)
+    
 def run_deepTools_allelic():
     file_list = []
     if os.path.isdir('allelic_bams') and os.listdir('allelic_bams') != []:
@@ -170,9 +176,7 @@ if paired:
         input:
             run_deepTools_qc(fromBam),
             run_deepTools_ChIP(),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak", chip_sample = chip_samples),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.chr.narrowPeak", chip_sample = chip_samples),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.qc.txt", chip_sample = chip_samples),
+            run_macs2(),
             # run histoneHMM if allelic_bams are absent (since it gives index error without allele_specific index)
             run_histoneHMM(allele_info),
             ## run deeptools-allelic only if dir "allelic_bams" present and non empty
@@ -187,9 +191,7 @@ else:
         input:
             run_deepTools_qc(fromBam),
             run_deepTools_ChIP(),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.narrowPeak", chip_sample = chip_samples),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.chr.narrowPeak", chip_sample = chip_samples),
-            expand("MACS2/{chip_sample}.filtered.BAM_peaks.qc.txt", chip_sample = chip_samples),
+            run_macs2(),
             # run histoneHMM if allelic_bams are absent (since it gives index error without allele_specific index)
             run_histoneHMM(allele_info),
             ## run deeptools-allelic only if dir "allelic_bams" present and non empty
