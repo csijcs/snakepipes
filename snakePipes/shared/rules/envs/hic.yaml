@@ -1,4 +1,4 @@
-name: hic_conda_env_1.0
+name: snakepipes_hic
 channels:
  - conda-forge
  - bioconda
