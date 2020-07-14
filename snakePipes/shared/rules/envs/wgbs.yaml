@@ -1,4 +1,4 @@
-name: WGBS-env-0.1.0
+name: snakepipes_WGBS
 channels:
   - conda-forge
   - bioconda
