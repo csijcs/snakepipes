@@ -1,4 +1,4 @@
-name: snakepipes_dna-mapping_1.0
+name: snakepipes_dna_mapping
 channels:
  - conda-forge
  - bioconda
