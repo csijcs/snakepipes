@@ -1,4 +1,4 @@
-name: snakepipes_RNAseq_environment_0.1
+name: snakepipes_RNAseq_environment
 channels:
  - conda-forge
  - bioconda
