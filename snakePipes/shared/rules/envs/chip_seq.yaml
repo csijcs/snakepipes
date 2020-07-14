@@ -1,4 +1,4 @@
-name: snakepipes_chip-seq_1.0
+name: snakepipes_chip_seq
 channels:
  - conda-forge
  - bioconda
