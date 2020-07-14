@@ -1,4 +1,4 @@
-name: snakepipes_atac-seq_1.0
+name: snakepipes_atac_seq
 channels:
  - conda-forge
  - bioconda
