@@ -1,4 +1,4 @@
-name: sambamba_environment
+name: snakepipes_sambamba
 channels:
  - conda-forge
  - bioconda
