@@ -1,4 +1,4 @@
-name: Rmd-env-1.0.0
+name: snakepipes_Rmd
 channels:
   - conda-forge
   - bioconda
