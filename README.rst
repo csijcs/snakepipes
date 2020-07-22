@@ -41,7 +41,7 @@ We have made modifications to the DNA-mapping and ChIP-seq workflows, in order t
 Installation
 -------------
 
-Begin by logging into the server and entering the terminal environment.
+Begin by logging into harris server and entering the terminal environment.
 
 First initialize conda in your environment with:
 
@@ -55,15 +55,15 @@ Find the path to the conda your are using with:
 
 ``which conda``
 
-For harris server (most if not all users), your conda path should be:
+For harris server, your conda path should be:
 
 ``/opt/anaconda/bin/conda``
 
-If you are on darwin, your conda path should be:
+Once you have conda working and the proper path, configure the directory for pkgs to be installed with:
 
-``/opt/anaconda3/bin/conda``
+``/opt/anaconda/bin/conda config --add pkgs_dirs ~/.conda/pkgs/``
 
-Once you have conda working and the proper path, clone this repository into your desired location with:
+Then clone this repository into your desired location with:
 
 ``git clone https://github.com/csijcs/snakepipes.git``
 
@@ -71,13 +71,11 @@ Change directory into the snakepipes folder with:
 
 ``cd snakepipes``
 
-Run the following using your full conda path (harris shown for example):
+First, create a new conda environment called "snakepipes" into which snakePipes is installed with:
 
 ``/opt/anaconda/bin/conda env create --file snakepipes.yaml``
 
-This will create a new conda environment called "snakepipes" into which snakePipes is installed. You will now need to create the conda environments needed by the various workflows.
-
-First activate the snakepipes environment with:
+Next, activate the snakepipes environment with:
 
 ``conda activate snakepipes``
 
@@ -85,7 +83,7 @@ Then run the build script with:
 
 ``sh build.sh``
 
-You now need to create the various environments required for the pipeline by running:
+You now need to create the various environments required for the pipelines by running:
 
 ``snakePipes createEnvs --condaDir ~/.conda/envs/snakepipes``
 
@@ -98,7 +96,7 @@ Be careful creating indices becuase if you create new indices for hg19 or hg38 ,
 
 Renaming files
 -------------
-**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work. If there are two samples with the same wz number (i.e. same split across two lanes) with second file will be renamed wzNUMBER_2 (i.e. wz3909_2). If there are more than two (not likely, but possible), it will give an error and not rename your additional files. If you do actually have more than two (i.e. split across more than two lanes), seek professional help.
+**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work. If there are two samples with the same wz number (i.e. same sample split across two lanes) with second file will be renamed wzNUMBER_2 (i.e. wz3909_2). If there are more than two (not likely, but possible), it will give an error and not rename your additional files. If you do actually have more than two (i.e. split across more than two lanes), seek professional help.
 
 Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the wz number (i.e. wz3909.bam). 
 
@@ -118,20 +116,19 @@ If you prefer, you can also run from terminal by copying the script into the fol
 
 Either way, this will rename all your files and move them into a folder called "rename". All of the files should have been moved into this folder, so if there are any remaining then something went wrong and you should seek help.
 
-Once your files are renamed, you are now ready to proceed with the arropriate pipeline below.
+Once your files are renamed, you are now ready to proceed with the appropriate pipeline below.
 
 DNA-mapping
 -------------
 
-For the DNA-mapping pipeline, the minimum required command is:
-
-``DNA-mapping -i /INPUT/DIR -o /OUTPUT/DIR --local genome_build`` 
-
-The default mapping program is Bowtie2. To use BWA (recommended for Zwart lab ChIP expriments), supply the path to the location of the bwa_mapping.yaml downloaded with this hub. After the renaming step above, all of you files should be in a folder called rename. For example, to run DNA mapping with BWA to hg19, run the following command:
+To use BWA for mapping (for Zwart lab ChIP expriments), supply the path to the location of the bwa_mapping.yaml downloaded with this hub. After the renaming step above, all of you files should be in a folder called rename. Be sure you know the appropriate genome build for your project (i.e. hg19 or hg38). For example, to run DNA mapping with BWA to hg19, run the following command:
 
 ``DNA-mapping -i /PATH/TO/FASTQ/rename -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
 
-Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome build.
+Here, -i specifies the input folder contaning the .fastq.gz files, -o is the output directory, --local runs on the local server and not on a cluster, -j specifies the number of threads, --trim tells the pipeline to trim the reads, --trim_prg tells the pipeline the program used to trim the reads, --fastqc tell it to run fastqc analysis, and finally hg19 specifies the genome build (adjust to hg38 as appropriate for your project).
+
+If, for purposes other than common Zwart lab ChIP expirements, you would like to map with Bowtie, simply remove the --configfile /PATH/TO/snakepipes/bwa_mapping.yaml from the command.
+
 
 ChIP-seq from DNA-mapping pipeline
 ----------------------------------
@@ -142,19 +139,25 @@ If you have run the DNA-mapping pipeline first, then simply run:
 
 ``ChIP-seq -d /PATH/TO/DNA-mapping/OUTPUT --local -j 10 --single-end hg19 sample_config.yaml``
 
-Here -d should be the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. If your samples are not single end then remove the --single-end flag. Also modify the genome_build (i.e. hg19) to suit your purposes).
+Here -d is the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. Most, if not all, of the ChIP-seq expriments from the Zwart lab should be single-end reads, but if your samples are not single end then remove the --single-end flag. The new projects should be getting mapped to the hg38 genome build, while ongoing projects that were previously mapped to hg19 should stay with hg19. Ensure you are not mixing hg38 and hg19 in your project or the results will be inconsistent.
 
 
 ChIP-seq from bam files
 -----------------------
 
-If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case,  all of your .bam files shold be renamed in a folder called "rename". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded from this hub. Then run:
+If you have not run the DNA-mapping pipeline first, then you can still run the pipeline directly from BAM files. In this case, all of your .bam files should be renamed in a folder called "rename". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded from this hub. For single-end reads the command to run is:
 
 ``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
 There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder. For narrow peaks, the macs2 output will end in ".narrowPeaks", and we have added chr to the chromosome numbers in the file ending in ".chr.narrowPeaks"
 
-Also, running pipelines will take some time so you may want to run it in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: 
+Most, if not all, Zwart lab ChIP experiments will be single-end. If you have paired-end reads from a collaborator or publically available dataset, you will need to supply the paired_end_from_bam.yaml file like so:
+
+``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/paired_end_from_bam.yaml --local -j 10 hg19 sample_config.yaml``
+
+Running Pipelines in screen
+----------------------------
+Running pipelines will take some time, so you will want to run in screen to avoid interruptions. (i.e. just add screen -dm before your command, like this: 
 
 ``screen -dm ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
 
@@ -162,7 +165,7 @@ It will look like nothing is happening, but it is running in detached mode and w
 
 ``screen -ls``
 
-If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something was wrong with your command (or your environment isn't activated).
+If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something went wrong (or your environment isn't activated).
 
 Additional Pipelines
 -----------------------
