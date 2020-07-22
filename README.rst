@@ -86,7 +86,7 @@ You do not need to create indices for hg19 or hg38. We provide premade indices s
 
 Renaming files
 -------------
-**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work. If there are two samples with the same wz number (i.e. same sample split across two lanes) with second file will be renamed wzNUMBER_2 (i.e. wz3909_2). If there are more than two (not likely, but possible), it will give an error and not rename your additional files. If you do actually have more than two (i.e. split across more than two lanes), seek professional help.
+**Note - all of youre sequencing filenames should contain a wz number (i.e. wz3909). Make sure to submit your samples with a wz number in the name or this script will not work. If there are two samples with the same wz number (i.e. same sample split across two lanes) the second file will be renamed wzNUMBER_2 (i.e. wz3909_2). If there are more than two (not likely, but possible), it will give an error and not rename your additional files. If you do actually have more than two (i.e. same sample split across more than two lanes), seek professional help.
 
 Before starting a pipeline, it's best to rename your files. The files from the core come with a very long filename (i.e. 5905_25_wz3909_TGACTTCG_S35.bam) and we will shorten this to just the wz number (i.e. wz3909.bam). 
 
@@ -118,8 +118,6 @@ For DNA mapping, we generally recommend using BWA. To do this, supply the path t
 Here, -i specifies the input folder contaning the fastq files, -o is the output directory of your choosing, and  hg19 specifies the genome build (adjust to hg38 as appropriate for your project). The rest of the parameters should not be altered for standard ChIP-seq experiments.
 
 **Note - Previous projects as well as many existing projects in the Zwart lab have been mapped using the bwa-backtrack algorithm. For legacy reasons, if you need your peakcalling results to match EXACTLY to previous results, we recommend using the bam files supplied by the core and taking them through the ChIP-seq from bam pipeline below. The BWA option for this DNA-mapping pipeline uses the bwa-mem algorithm, which will produce very similar but not exactly the same results.  
-
-If, for purposes other than Zwart lab ChIP expirements, you would like to map with Bowtie, simply remove the --configfile /PATH/TO/snakepipes/bwa_mapping.yaml from the command.
 
 
 ChIP-seq from DNA-mapping pipeline
@@ -160,7 +158,7 @@ It will look like nothing is happening, but it is running in detached mode and w
 
 ``screen -ls``
 
-If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something went wrong (or your environment isn't activated).
+If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something went wrong (or your environment isn't activated). You can check the log files or seek help.
 
 Additional Pipelines
 -----------------------
