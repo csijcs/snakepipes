@@ -17,11 +17,6 @@ snakePipes
 
 This repository is a modification of the snakePipes workflows forked from `https://github.com/maxplanck-ie/snakepipes`
 
-.. image:: ./docs/content/images/snakePipes.png
-   :scale: 20 %
-   :height: 100px
-   :width: 100 px
-   :align: right
 
 Workflows available
 --------------------
