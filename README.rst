@@ -108,39 +108,16 @@ Either way, this will rename all your files and move them into a folder called "
 
 Once your files are renamed, you are now ready to proceed with the appropriate pipeline below.
 
-DNA-mapping
--------------
-
-For DNA mapping, we generally recommend using BWA. To do this, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. After the renaming step above, all of your fastq files should be in a folder called rename. Be sure you know the appropriate genome build for your project (i.e. hg19 or hg38). For example, to run DNA mapping with BWA to hg19, run the following command:
-
-``DNA-mapping -i /PATH/TO/FASTQ/rename -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
-
-Here, -i specifies the input folder contaning the fastq files, -o is the output directory of your choosing, and  hg19 specifies the genome build (adjust to hg38 as appropriate for your project). The rest of the parameters should not be altered for standard ChIP-seq experiments.
-
-**Note - Previous projects as well as many existing projects in the Zwart lab have been mapped using the bwa-backtrack algorithm. For legacy reasons, if you need your peakcalling results to match EXACTLY to previous results, we recommend using the bam files supplied by the core and taking them through the ChIP-seq from bam pipeline below. The BWA option for this DNA-mapping pipeline uses the bwa-mem algorithm, which will produce very similar but not exactly the same results.  
-
-
-ChIP-seq from DNA-mapping pipeline
-----------------------------------
-
-The ChIP-seq pipline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the program your sample names, the control for each sample, and whether to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
-
-If you have run the DNA-mapping pipeline first, then simply run:
-
-``ChIP-seq -d /PATH/TO/DNA-mapping/OUTPUT --local -j 10 --single-end hg19 sample_config.yaml``
-
-Here -d is the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. 
-
-**Note - The new projects should be getting mapped to the hg38 genome build, while ongoing projects that were previously mapped to hg19 should stay with hg19. Ensure you are not mixing hg38 and hg19 in your project or the results will be inconsistent.  
-
-**Note - Most, if not all, Zwart lab ChIP experiments will be single-end. If you have paired-end reads from a collaborator or publically available dataset, you will need to supply the paired_end_from_bam.yaml file instead, and remove the --single-end option.
-
 ChIP-seq from bam files
 -----------------------
 
-If you have not run the DNA-mapping pipeline, you can run the ChIP-seq pipeline directly from BAM files. In this case, all of your .bam files should be renamed in a folder called "rename". You will also need to supply the path to the from_bam.yaml in the snakepipes folder downloaded wit this hub. For single-end reads the command to run is:
+If you have .bam files aligned by the core, you can run the ChIP-seq pipeline on these after first renaming them. All of your .bam files should be renamed in a folder called "rename". You will need to supply the path to the from_bam.yaml in the snakepipes folder downloaded with this hub. Be sure you know the appropriate genome build for your project (i.e. hg19 or hg38). You will also need to supply a sample_config.yaml file, telling the program your sample names, the control for each sample, and whether to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file in the snakepipes folder downloaded with this hub.
+
+For single-end reads aligned to hg19 the command to run is:
 
 ``ChIP-seq -d /PATH/TO/OUTPUT/DIR --fromBam /PATH/TO/bam/rename --configfile /PATH/TO/snakepipes/from_bam.yaml --local -j 10 --single-end hg19 sample_config.yaml``
+
+Here -d specifies the path to the output directory of your choice, --fromBam is the path to your rename folder containing the renamed bams, and hg19 specifies the genome build.
 
 There will be various folder outputs, including some QC, and the peak files will be in the MACS2 folder. For narrow peaks, the macs2 output will end in ".narrowPeaks", and we have added chr to the chromosome numbers in the file ending in ".chr.narrowPeaks" for your convenience.
 
@@ -159,6 +136,35 @@ It will look like nothing is happening, but it is running in detached mode and w
 ``screen -ls``
 
 If you run screen -ls immediately after executing your screen -dm ChIP-seq... command and you do not see an output for your running screen, then something went wrong (or your environment isn't activated). You can check the log files or seek help.
+
+
+DNA-mapping
+-------------
+
+If you have .fastq files your would like to perform ChIP-seq anylysis on, you will first need to run the DNA-mapping pipeline. For DNA mapping, we generally recommend using BWA. To do this, supply the path to the location of the bwa_mapping.yaml downloaded with this hub. After the renaming step above, all of your fastq files should be in a folder called rename. Be sure you know the appropriate genome build for your project (i.e. hg19 or hg38). For example, to run DNA mapping with BWA to hg19, run the following command:
+
+``DNA-mapping -i /PATH/TO/FASTQ/rename -o /PATH/TO/OUTPUT/DIRECTORY --configfile /PATH/TO/snakepipes/bwa_mapping.yaml --local -j 10 --mapq 20 --trim --trim_prg cutadapt --fastqc hg19``
+
+Here, -i specifies the input folder contaning the fastq files, -o is the output directory of your choosing, and  hg19 specifies the genome build (adjust to hg38 as appropriate for your project). The rest of the parameters should not be altered for standard ChIP-seq experiments.
+
+**Note - Previous projects as well as many existing projects in the Zwart lab have been mapped using the bwa-backtrack algorithm. For legacy reasons, if you need your peakcalling results to match EXACTLY to previous results, we recommend using the bam files supplied by the core and taking them through the ChIP-seq from bam pipeline. The BWA option for this DNA-mapping pipeline uses the bwa-mem algorithm, which will produce very similar but not exactly the same results.  
+
+
+ChIP-seq from DNA-mapping pipeline
+----------------------------------
+
+The ChIP-seq pipeline is designed to take the ouput directly from the DNA-mapping pipeline. The only additional file you will need is a sample_config.yaml file, telling the program your sample names, the control for each sample, and whether to look for broad peaks (i.e. histone marks) or narrow peaks (i.e. transcription factors). See the example sample_config.yaml file above.
+
+If you have run the DNA-mapping pipeline first, then simply run:
+
+``ChIP-seq -d /PATH/TO/DNA-mapping/OUTPUT --local -j 10 --single-end hg19 sample_config.yaml``
+
+Here -d is the directory with the output of the DNA-mapping pipeline, and it will also direct the output of the ChIP-seq pipeline there. 
+
+**Note - The new projects should be getting mapped to the hg38 genome build, while ongoing projects that were previously mapped to hg19 should stay with hg19. Ensure you are not mixing hg38 and hg19 in your project or the results will be inconsistent.  
+
+**Note - Most, if not all, Zwart lab ChIP experiments will be single-end. If you have paired-end reads from a collaborator or publically available dataset, you will need to supply the paired_end_from_bam.yaml file instead, and remove the --single-end option.
+
 
 Additional Pipelines
 -----------------------
