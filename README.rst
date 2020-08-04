@@ -40,7 +40,7 @@ Begin by logging into harris server and entering the terminal environment.
 
 First initialize conda in your environment with:
 
-``conda init``
+``/opt/anaconda/bin/conda init``
 
 Ensure conda is properly installed by running:
 
@@ -53,6 +53,8 @@ Find the path to the conda your are using with:
 For harris server, your conda path should be:
 
 ``/opt/anaconda/bin/conda``
+
+If this is not your conda path, then you may need to log out and log back into the server and try again.
 
 Once you have conda working and the proper path, configure the directory for pkgs to be installed with:
 
