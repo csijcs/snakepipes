@@ -69,7 +69,7 @@ dependencies:
 - r-rpart=4.1_10=r3.3.2_0
 - r-spatial=7.3_11=r3.3.2_0
 - r-survival=2.40_1=r3.3.2_0
-  #- readline=6.2=2
+- readline=6.2=2
   #- tk=8.6.7=h5979e9b_1
 - xz=5.2.3=h2bcbf08_1
 - zlib=1.2.11=hfbfcf68_1
