@@ -40,25 +40,23 @@ Begin by logging into harris server and entering the terminal environment.
 
 First initialize conda in your environment with:
 
-``/opt/anaconda/bin/conda init``
+``/opt/miniconda3/bin/conda``
 
 Ensure conda is properly installed by running:
 
 ``conda --version``
 
-Find the path to the conda your are using with:
+Configure the directory for pkgs to be installed with:
 
-``which conda``
+``conda config --add pkgs_dirs ~/.conda/pkgs/``
 
-For harris server, your conda path should be:
+Change into your home directory (or wherever you wish to clone the repository) with:
 
-``/opt/anaconda/bin/conda``
+``cd ~``
 
-If this is not your conda path, then you may need to log out and log back into the server and try again.
+Remove the previous version with:
 
-Once you have conda working and the proper path, configure the directory for pkgs to be installed with:
-
-``/opt/anaconda/bin/conda config --add pkgs_dirs ~/.conda/pkgs/``
+``rm -r snakepipes``
 
 Then clone this repository into your desired location with:
 
@@ -70,7 +68,7 @@ Change directory into the snakepipes folder with:
 
 First, create a new conda environment called "snakepipes" into which snakePipes is installed with:
 
-``/opt/anaconda/bin/conda env create --file snakepipes.yaml``
+``conda env create --file snakepipes.yaml``
 
 Next, activate the snakepipes environment with:
 
