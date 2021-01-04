@@ -40,9 +40,17 @@ Begin by logging into harris server and entering the terminal environment.
 
 First initialize conda in your environment with:
 
-``/opt/miniconda3/bin/conda``
+``/opt/miniconda3/bin/conda init``
 
-Ensure conda is properly installed by running:
+To ensure there are no issues with initializing conda, please log out of RStudio, open a new browser window, log into RStudio, and start a new instance of terminal. At the terminal prompt you should see:
+
+``(base) your.name@harris:~$``
+
+Ensure you have the proper conda path (/opt/miniconda3/bin/conda) by running:
+
+``which conda``
+
+Ensure conda is properly initialized by running:
 
 ``conda --version``
 
@@ -50,11 +58,15 @@ Configure the directory for pkgs to be installed with:
 
 ``conda config --add pkgs_dirs ~/.conda/pkgs/``
 
-Change into your home directory (or wherever you wish to clone the repository) with:
+Remove your old snakepipes environment by running the command below and answering y at the prompt:
+
+``conda remove -n snakepipes --all``
+
+Change into your home directory (or wherever you wish to clone this repository) with:
 
 ``cd ~``
 
-Remove the previous version with:
+Remove the previous version of this repository with:
 
 ``rm -r snakepipes``
 
@@ -66,13 +78,17 @@ Change directory into the snakepipes folder with:
 
 ``cd snakepipes``
 
-First, create a new conda environment called "snakepipes" into which snakePipes is installed with:
+Install a new snakepipes environment with:
 
 ``conda env create --file snakepipes.yaml``
 
 Next, activate the snakepipes environment with:
 
 ``conda activate snakepipes``
+
+At the terminal prompt you should see:
+
+``(snakepipes) your.name@harris:~$``
 
 Then run the build script with:
 
