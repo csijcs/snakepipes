@@ -42,6 +42,10 @@ First initialize conda in your environment with:
 
 ``/opt/miniconda3/bin/conda init``
 
+Then run:
+
+``source ~/.bashrc``
+
 To ensure there are no issues with initializing conda, please log out of RStudio, open a new browser window, log into RStudio, and start a new instance of terminal. At the terminal prompt you should see:
 
 ``(base) your.name@harris:~$``
